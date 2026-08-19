@@ -1,4 +1,4 @@
-dna_sequence = input("Enter the DNA sequence: ").strip()
+dna_sequence = input("Enter the DNA sequence: ").strip().upper()
 
 # calcualte dna sequence length
 sequence_length = len(dna_sequence)
