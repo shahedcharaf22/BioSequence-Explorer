@@ -70,21 +70,15 @@ def get_reverse_complement(sequence):
 
 
 # -----------------------------
-# USER INPUT
+# USER INPUT + Error Handling 
 # -----------------------------
 
-dna_sequence = input("Enter the DNA sequence: ").strip().upper()
+try:
+    dna_sequence = input("Enter the DNA sequence: ").strip().upper()
 
+    if not dna_sequence:
+        raise ValueError("DNA sequence cannot be empty.")
 
-# -----------------------------
-# PROGRAM FLOW
-# -----------------------------
-
-# Handle empty DNA input
-if not dna_sequence:
-    print("Error: DNA sequence cannot be empty.")
-
-else:
     # Calculate DNA sequence length
     sequence_length = len(dna_sequence)
 
@@ -96,27 +90,40 @@ else:
 
     print("Valid DNA Sequence:", is_valid)
 
-    # Only analyze valid DNA
-    if is_valid:
-        nucleotide_counts = count_nucleotides(dna_sequence)
-
-        # Get the value stored under each nucleotide key
-        print("A count:", nucleotide_counts["A"])
-        print("T count:", nucleotide_counts["T"])
-        print("C count:", nucleotide_counts["C"])
-        print("G count:", nucleotide_counts["G"])
-
-        gc_content = calculate_gc_content(dna_sequence)
-        print(f"GC Content: {gc_content}%")
-
-        complement = get_complement(dna_sequence)
-        print("Complement:", complement)
-
-        reverse_complement = get_reverse_complement(dna_sequence)
-        print("Reverse complement:", reverse_complement)
-
-    else:
+    if not is_valid:
+        
         invalid_nucleotides = find_invalid_nucleotides(dna_sequence)
         formatted_invalid = ", ".join(sorted(invalid_nucleotides))
-        print("Error: Invalid nucleotides found:", formatted_invalid)
+
+        raise ValueError(
+              f"Invalid nucleotides found: {formatted_invalid}"
+        )
+
+    # Only analyze valid DNA
+    nucleotide_counts = count_nucleotides(dna_sequence)
+
+    # Get the value stored under each nucleotide key
+    print("A count:", nucleotide_counts["A"])
+    print("T count:", nucleotide_counts["T"])
+    print("C count:", nucleotide_counts["C"])
+    print("G count:", nucleotide_counts["G"])
+
+    gc_content = calculate_gc_content(dna_sequence)
+    print(f"GC Content: {gc_content}%")
+
+    complement = get_complement(dna_sequence)
+    print("Complement:", complement)
+
+    reverse_complement = get_reverse_complement(dna_sequence)
+    print("Reverse complement:", reverse_complement)
+
+
+except ValueError as error:
+    print ("Error:", error)
+
+
+
+        
+
+        
        
