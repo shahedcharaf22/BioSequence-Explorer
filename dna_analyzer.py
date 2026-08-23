@@ -4,17 +4,10 @@
 
 # Check every nucleotide one by one
 def validate_dna(sequence):
-    # Assume it's valid
-    is_valid = True
+    valid_nucleotides = {"A", "T", "C", "G"}
 
-    # Check whether the DNA sequence is valid
-    for letter in sequence:
-        if letter not in "ATCG":
-            is_valid = False
-
-    return is_valid
-
-
+    return set(sequence).issubset(valid_nucleotides)
+    
 # Count the nucleotides
 def count_nucleotides(sequence):
     counts = {
