@@ -7,6 +7,7 @@ from dna_utils import (
     get_reverse_complement,
     read_dna_file,
     read_dna_csv,
+    
 )
 
 # -----------------------------
@@ -42,6 +43,8 @@ def analyze_sequence(sequence):
     reverse_complement = get_reverse_complement(sequence)
     print("Reverse Complement:", reverse_complement)
 
+    return gc_content
+
 try:
     
     input_choice = input(
@@ -63,19 +66,41 @@ try:
         file_path = f"data/{file_name}"
 
         samples = read_dna_csv(file_path)
-        
 
+        total_samples = 0
+        valid_samples = 0
+        invalid_samples = 0
+        gc_values = []
+        
         for sample in samples:
+            total_samples += 1
+
             sample_id = sample["sample_id"]
             sequence = sample["sequence"]
 
             print("\nSample:", sample_id)
             print("Sequence:", sequence)
-
+    
             try:
-                analyze_sequence(sequence)
+                gc_content = analyze_sequence(sequence)
+                valid_samples += 1
+                gc_values.append(gc_content)
+
             except ValueError as error:
-                print("Error:", error)
+                  invalid_samples += 1
+                  print("Error:", error)
+
+        if gc_values:
+           average_gc = sum(gc_values) / len(gc_values)
+        else:
+           average_gc = 0
+        
+        print("\nDataset Summary")
+        print("----------------")
+        print("Total samples:", total_samples)
+        print("Valid samples:", valid_samples)
+        print("Invalid samples:", invalid_samples)
+        print("Average GC content:", f"{round(average_gc, 2)}%")
 
     else:
         raise ValueError("Invalid input method. Choose 1, 2 or 3.")
