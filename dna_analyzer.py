@@ -68,13 +68,34 @@ def get_reverse_complement(sequence):
 
     return reverse_complement
 
+# FILE-READING 
+def read_dna_file(file_path):
+    with open(file_path, "r") as file:
+        sequence = file.read().strip().upper()
+
+    return sequence
 
 # -----------------------------
 # USER INPUT + Error Handling 
 # -----------------------------
 
 try:
-    dna_sequence = input("Enter the DNA sequence: ").strip().upper()
+    
+    input_choice = input(
+        "Choose input method (1 = manual, 2 = file): "
+    )
+
+    if input_choice == "1":
+        dna_sequence = input("Enter the DNA sequence: ").strip().upper()
+
+    elif input_choice == "2":
+        file_name = input("Enter DNA file name: ").strip()
+        file_path = f"data/{file_name}"
+        dna_sequence = read_dna_file(file_path)
+
+    else:
+        raise ValueError("Invalid input method. Choose 1 or 2.")
+
 
     if not dna_sequence:
         raise ValueError("DNA sequence cannot be empty.")
@@ -120,6 +141,9 @@ try:
 
 except ValueError as error:
     print ("Error:", error)
+
+except FileNotFoundError:
+    print("Error: DNA file was not found.")
 
 
 
