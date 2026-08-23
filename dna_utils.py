@@ -1,6 +1,16 @@
-# -----------------------------
-# FUNCTION DEFINITIONS
-# -----------------------------
+import csv
+
+def read_dna_csv(file_path):
+    samples = []
+
+    with open(file_path, "r") as file:
+        reader = csv.DictReader(file)
+
+        for row in reader:
+            row["sequence"] = row["sequence"].strip().upper()
+            samples.append(row)
+
+    return samples
 
 # Check every nucleotide one by one
 def validate_dna(sequence):
@@ -74,3 +84,4 @@ def read_dna_file(file_path):
         sequence = file.read().strip().upper()
 
     return sequence
+
