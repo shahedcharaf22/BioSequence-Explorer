@@ -4,7 +4,8 @@ from dna_utils import (
     calculate_gc_content,
     get_complement,
     get_reverse_complement,
-    find_invalid_nucleotides
+    find_invalid_nucleotides,
+    read_dna_csv,
 )
 
 def test_valid_dna():
@@ -40,3 +41,14 @@ def test_find_invalid_nucleotides():
     result = find_invalid_nucleotides("ATGCXZ")
 
     assert result == {"X", "Z"}
+
+def test_read_dna_csv():
+    samples = read_dna_csv("data/dna_samples.csv")
+
+    assert len(samples) == 4
+
+    assert samples[0]["sample_id"] == "sample_1"
+    assert samples[0]["sequence"] == "ATGCGTAC"
+
+    assert samples[2]["sample_id"] == "sample_3"
+    assert samples[2]["sequence"] == "ATGXCTGA"

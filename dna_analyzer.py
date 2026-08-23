@@ -6,71 +6,79 @@ from dna_utils import (
     get_complement,
     get_reverse_complement,
     read_dna_file,
+    read_dna_csv,
 )
 
 # -----------------------------
 # USER INPUT + Error Handling 
 # -----------------------------
 
+def analyze_sequence(sequence):
+    if not sequence:
+        raise ValueError("DNA sequence cannot be empty.")
+
+    sequence_length = len(sequence)
+    print("Sequence Length:", sequence_length)
+
+    is_valid = validate_dna(sequence)
+    print("Valid DNA:", is_valid)
+
+    if not is_valid:
+        invalid_nucleotides = find_invalid_nucleotides(sequence)
+        formatted_invalid = ", ".join(sorted(invalid_nucleotides))
+        raise ValueError(
+            f"Invalid nucleotides found: {formatted_invalid}"
+        )
+
+    nucleotide_counts = count_nucleotides(sequence)
+    print("Nucleotide Counts:", nucleotide_counts)
+
+    gc_content = calculate_gc_content(sequence)
+    print("GC Content:", f"{gc_content}%")
+
+    complement = get_complement(sequence)
+    print("Complement:", complement)
+
+    reverse_complement = get_reverse_complement(sequence)
+    print("Reverse Complement:", reverse_complement)
+
 try:
     
     input_choice = input(
-        "Choose input method (1 = manual, 2 = file): "
+        "Choose input method (1 = manual, 2 = file, 3 = csv): "
     )
 
     if input_choice == "1":
         dna_sequence = input("Enter the DNA sequence: ").strip().upper()
+        analyze_sequence(dna_sequence)
 
     elif input_choice == "2":
         file_name = input("Enter DNA file name: ").strip()
         file_path = f"data/{file_name}"
         dna_sequence = read_dna_file(file_path)
+        analyze_sequence(dna_sequence)
+
+    elif input_choice == "3":
+        file_name = input("Enter CSV file name: ").strip()
+        file_path = f"data/{file_name}"
+
+        samples = read_dna_csv(file_path)
+        
+
+        for sample in samples:
+            sample_id = sample["sample_id"]
+            sequence = sample["sequence"]
+
+            print("\nSample:", sample_id)
+            print("Sequence:", sequence)
+
+            try:
+                analyze_sequence(sequence)
+            except ValueError as error:
+                print("Error:", error)
 
     else:
-        raise ValueError("Invalid input method. Choose 1 or 2.")
-
-
-    if not dna_sequence:
-        raise ValueError("DNA sequence cannot be empty.")
-
-    # Calculate DNA sequence length
-    sequence_length = len(dna_sequence)
-
-    print("DNA Sequence:", dna_sequence)
-    print("Sequence Length:", sequence_length)
-
-    # Validate DNA
-    is_valid = validate_dna(dna_sequence)
-
-    print("Valid DNA Sequence:", is_valid)
-
-    if not is_valid:
-        
-        invalid_nucleotides = find_invalid_nucleotides(dna_sequence)
-        formatted_invalid = ", ".join(sorted(invalid_nucleotides))
-
-        raise ValueError(
-              f"Invalid nucleotides found: {formatted_invalid}"
-        )
-
-    # Only analyze valid DNA
-    nucleotide_counts = count_nucleotides(dna_sequence)
-
-    # Get the value stored under each nucleotide key
-    print("A count:", nucleotide_counts["A"])
-    print("T count:", nucleotide_counts["T"])
-    print("C count:", nucleotide_counts["C"])
-    print("G count:", nucleotide_counts["G"])
-
-    gc_content = calculate_gc_content(dna_sequence)
-    print(f"GC Content: {gc_content}%")
-
-    complement = get_complement(dna_sequence)
-    print("Complement:", complement)
-
-    reverse_complement = get_reverse_complement(dna_sequence)
-    print("Reverse complement:", reverse_complement)
-
+        raise ValueError("Invalid input method. Choose 1, 2 or 3.")
 
 except ValueError as error:
     print ("Error:", error)
