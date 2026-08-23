@@ -7,6 +7,13 @@ def validate_dna(sequence):
     valid_nucleotides = {"A", "T", "C", "G"}
 
     return set(sequence).issubset(valid_nucleotides)
+
+def find_invalid_nucleotides(sequence):
+    valid_nucleotides = {"A", "T", "C", "G"}
+
+    invalid_nucleotides = set(sequence) - valid_nucleotides
+
+    return invalid_nucleotides
     
 # Count the nucleotides
 def count_nucleotides(sequence):
@@ -109,4 +116,7 @@ else:
         print("Reverse complement:", reverse_complement)
 
     else:
-        print("Error: DNA sequence contains invalid nucleotides.")
+        invalid_nucleotides = find_invalid_nucleotides(dna_sequence)
+        formatted_invalid = ", ".join(sorted(invalid_nucleotides))
+        print("Error: Invalid nucleotides found:", formatted_invalid)
+       
