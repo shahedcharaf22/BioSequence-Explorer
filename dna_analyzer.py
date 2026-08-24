@@ -45,6 +45,49 @@ def analyze_sequence(sequence):
 
     return gc_content
 
+def analyze_dataset(samples):
+    total_samples = 0
+    valid_samples = 0
+    invalid_samples = 0
+    gc_values = []
+
+    for sample in samples:
+        total_samples += 1
+    
+        sample_id = sample["sample_id"]
+        sequence = sample["sequence"]
+    
+        print("\nSample:", sample_id)
+        print("Sequence:", sequence)
+        
+        try:
+            gc_content = analyze_sequence(sequence)
+            valid_samples += 1
+            gc_values.append(gc_content)
+    
+        except ValueError as error:
+            invalid_samples += 1
+            print("Error:", error)
+    
+    if gc_values:
+        average_gc = sum(gc_values) / len(gc_values)
+    else:
+        average_gc = 0
+            
+    print("\nDataset Summary")
+    print("----------------")
+    print("Total samples:", total_samples)
+    print("Valid samples:", valid_samples)
+    print("Invalid samples:", invalid_samples)
+    print("Average GC content:", f"{round(average_gc, 2)}%")
+
+    return {
+        "total_samples": total_samples,
+        "valid_samples": valid_samples,
+        "invalid_samples": invalid_samples,
+        "average_gc": round(average_gc, 2),
+    }
+
 try:
     
     input_choice = input(
@@ -66,41 +109,7 @@ try:
         file_path = f"data/{file_name}"
 
         samples = read_dna_csv(file_path)
-
-        total_samples = 0
-        valid_samples = 0
-        invalid_samples = 0
-        gc_values = []
-        
-        for sample in samples:
-            total_samples += 1
-
-            sample_id = sample["sample_id"]
-            sequence = sample["sequence"]
-
-            print("\nSample:", sample_id)
-            print("Sequence:", sequence)
-    
-            try:
-                gc_content = analyze_sequence(sequence)
-                valid_samples += 1
-                gc_values.append(gc_content)
-
-            except ValueError as error:
-                  invalid_samples += 1
-                  print("Error:", error)
-
-        if gc_values:
-           average_gc = sum(gc_values) / len(gc_values)
-        else:
-           average_gc = 0
-        
-        print("\nDataset Summary")
-        print("----------------")
-        print("Total samples:", total_samples)
-        print("Valid samples:", valid_samples)
-        print("Invalid samples:", invalid_samples)
-        print("Average GC content:", f"{round(average_gc, 2)}%")
+        analyze_dataset(samples)
 
     else:
         raise ValueError("Invalid input method. Choose 1, 2 or 3.")
