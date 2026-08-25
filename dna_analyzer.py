@@ -88,41 +88,42 @@ def analyze_dataset(samples):
         "average_gc": round(average_gc, 2),
     }
 
-try:
+def main():
     
-    input_choice = input(
-        "Choose input method (1 = manual, 2 = file, 3 = csv): "
-    )
-
-    if input_choice == "1":
-        dna_sequence = input("Enter the DNA sequence: ").strip().upper()
-        analyze_sequence(dna_sequence)
-
-    elif input_choice == "2":
-        file_name = input("Enter DNA file name: ").strip()
-        file_path = f"data/{file_name}"
-        dna_sequence = read_dna_file(file_path)
-        analyze_sequence(dna_sequence)
-
-    elif input_choice == "3":
-        file_name = input("Enter CSV file name: ").strip()
-        file_path = f"data/{file_name}"
-
-        samples = read_dna_csv(file_path)
-        analyze_dataset(samples)
-
-    else:
-        raise ValueError("Invalid input method. Choose 1, 2 or 3.")
-
-except ValueError as error:
-    print ("Error:", error)
-
-except FileNotFoundError:
-    print("Error: DNA file was not found.")
-
-
-
+    try:
         
+        input_choice = input(
+            "Choose input method (1 = manual, 2 = file, 3 = csv): "
+        )
+
+        if input_choice == "1":
+            dna_sequence = input("Enter the DNA sequence: ").strip().upper()
+            analyze_sequence(dna_sequence)
+
+        elif input_choice == "2":
+            file_name = input("Enter DNA file name: ").strip()
+            file_path = f"data/{file_name}"
+            dna_sequence = read_dna_file(file_path)
+            analyze_sequence(dna_sequence)
+
+        elif input_choice == "3":
+            file_name = input("Enter CSV file name: ").strip()
+            file_path = f"data/{file_name}"
+
+            samples = read_dna_csv(file_path)
+            analyze_dataset(samples)
+
+        else:
+            raise ValueError("Invalid input method. Choose 1, 2 or 3.")
+
+    except ValueError as error:
+        print ("Error:", error)
+
+    except FileNotFoundError:
+        print("Error: DNA file was not found.")
+
+if __name__ == "__main__":
+       main()
 
         
        
